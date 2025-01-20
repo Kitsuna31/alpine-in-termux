@@ -100,8 +100,10 @@ tar -xvzf alpine.tar.gz -C alpine-fs
 ```
 ./installer.sh -y
 ```
-
-
+4. Start
+```
+./startalpine.sh
+```
 
 ---
 
