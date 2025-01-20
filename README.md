@@ -27,37 +27,39 @@ This is a script that allows you to install Alpine Linux in your Termux applicat
 ### Installation Steps
 
 1. Update Termux:
-   ```bash
+   ```
    apt-get update && apt-get upgrade -y
-
+   ```
+   
 2. Install required packages:
-
-apt-get install wget proot tar -y
-
+   ```
+   apt-get install wget proot tar -y
+   ```
 
 3. Download the installation script:
+   ```
+   git clone https://github.com/Kitsuna31/alpine-in-termux.git
+   ```
 
-git clone https://github.com/Kitsuna31/alpine-in-termux.git
-
-4. Navigate to the script folder:
-
-cd alpine-in-termux
-
+4. Go to the script folder:
+   ```
+   cd alpine-in-termux
+   ```
 
 5. Give execution permissions to the installer:
-
-chmod +x installer.sh
-
+   ```
+   chmod +x installer.sh
+   ```
 
 6. Run the installer:
-
-./installer.sh -y
-
+   ```
+   ./installer.sh -y
+   ```
 
 7. Start Alpine Linux:
-
-./startalpine.sh
-
+   ```
+   ./startalpine.sh
+   ```
 
 
 
@@ -66,34 +68,37 @@ chmod +x installer.sh
 Common Issue: proot Errors
 
 If you encounter the following error while starting Alpine:
-
+```
 ./startalpine.sh
 proot warning: can't sanitize binding "alpine-fs/tmp": No such file or directory
 proot warning: can't chdir("/root/.") in the guest rootfs: No such file or directory
 proot info: default working directory is now "/"
 proot error: '/usr/bin/env' not found (root = /data/data/com.termux/files/home/alpine-fs, cwd = /, $PATH=(null))
-fatal error: see `proot --help`.
+fatal error: see proot --help.
+```
 
 How to Fix It:
 
 1. Check if alpine.tar.gz exists:
-
-ls -lh alpine.tar.gz
+   ```
+   ls -lh alpine.tar.gz
+   ```
 
 If the file is missing, download it again:
-
-wget https://dl-cdn.alpinelinux.org/alpine/v3.18/releases/aarch64/alpine-minirootfs-3.18.0-aarch64.tar.gz -O alpine.tar.gz
+   ```
+   wget https://dl-cdn.alpinelinux.org/alpine/v3.18/releases/aarch64/alpine-minirootfs-3.18.0-aarch64.tar.gz -O alpine.tar.gz
+   ```
 
 
 2. Manually extract alpine.tar.gz to the alpine-fs directory:
-
+```
 tar -xvzf alpine.tar.gz -C alpine-fs
-
+```
 
 3. Reinstall Alpine:
-
+```
 ./installer.sh -y
-
+```
 
 
 
