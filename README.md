@@ -53,7 +53,7 @@ This is a script that allows you to install Alpine Linux in your Termux applicat
 
 6. Run the installer:
    ```
-   ./installer.sh -y
+   ./installer.sh
    ```
 
 7. Start Alpine Linux:
