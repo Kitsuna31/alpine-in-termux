@@ -52,13 +52,12 @@ This is a script that allows you to install Alpine Linux in your Termux applicat
    ```
 
 6. Run the installer:
-     Note: If an error occurs while running ./installer.sh, please download it again.
    ```
    ./installer.sh
    ```
    note: if an error occurs during installation run ./installer.sh again and it will be fixed
 
-8. Start Alpine Linux:
+7. Start Alpine Linux:
    ```
    ./startalpine.sh
    ```
@@ -92,7 +91,7 @@ How to Fix It:
    ```
 
 
-1. Manually extract alpine.tar.gz to the alpine-fs directory:
+2. Manually extract alpine.tar.gz to the alpine-fs directory:
 ```
 tar -xvzf alpine.tar.gz -C alpine-fs
 ```
