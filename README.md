@@ -85,7 +85,7 @@ How to Fix It:
    ls -lh alpine.tar.gz
    ```
 
-    If the file is missing or an error occurs when running ./installer.sh, please download it again:
+    note: If the file is missing or an error occurs when running ./installer.sh, please download it again that will be fix:
    ```
    wget https://dl-cdn.alpinelinux.org/alpine/v3.18/releases/aarch64/alpine-minirootfs-3.18.0-aarch64.tar.gz -O alpine.tar.gz
    ```
