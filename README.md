@@ -1,5 +1,5 @@
 # alpine-in-termux
-
+ini
 [![KitStudio Project](https://img.shields.io/badge/KitStudio%20Project-GitHub%20Projects-black?style=for-the-badge&logo=github&logoColor=white&labelColor=%232F2F2F)](https://github.com/Kitsuna31?tab=projects)
 
 ## What's This?
@@ -37,8 +37,7 @@ apt-get install wget proot tar -y
 
 3. Download the installation script:
 
-git clone https://github.com/your-repo/alpine-in-termux.git
-
+git clone https://github.com/Kitsuna31/alpine-in-termux.git
 
 4. Navigate to the script folder:
 
