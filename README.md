@@ -109,7 +109,7 @@ tar -xvzf alpine.tar.gz -C alpine-fs
 
 Credits
 
-This project was inspired by ubuntu-in-termux. Special thanks to the contributors of that project for their innovative approach to running Ubuntu on Termux, which inspired this Alpine Linux adaptation.
+This project was inspired by the ubuntu-in-termux project. I would like to express my sincere gratitude to the creator of ubuntu-in-termux, MFDGaming, whose work inspired the creation of the alpine-in-termux project.
 
 ubuntu-in-termux
 https://github.com/MFDGaming/ubuntu-in-termux
