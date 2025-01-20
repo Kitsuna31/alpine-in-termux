@@ -33,7 +33,7 @@ This is a script that allows you to install Alpine Linux in your Termux applicat
    
 2. Install required packages:
    ```
-   apt-get install wget proot tar -y
+   apt-get install wget proot git tar -y
    ```
 
 3. Download the installation script:
