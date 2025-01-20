@@ -84,14 +84,14 @@ How to Fix It:
    ```
    ls -lh alpine.tar.gz
    ```
-
-    note: If the file is missing or an error occurs when running ./installer.sh, please download it again that will be fix:
+    
+    Note: If the file is missing, please download it again.
    ```
    wget https://dl-cdn.alpinelinux.org/alpine/v3.18/releases/aarch64/alpine-minirootfs-3.18.0-aarch64.tar.gz -O alpine.tar.gz
    ```
 
 
-2. Manually extract alpine.tar.gz to the alpine-fs directory:
+1. Manually extract alpine.tar.gz to the alpine-fs directory:
 ```
 tar -xvzf alpine.tar.gz -C alpine-fs
 ```
