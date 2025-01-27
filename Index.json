@@ -1,15 +1,15 @@
 {
   "packages": [
     {
-      "name": "esp32",
-      "maintainer": "Espressif Systems",
-      "websiteURL": "https://github.com/espressif/arduino-esp32",
+      "name": "esp32 ks",
+      "maintainer": "KitStudio",
+      "websiteURL": "https://github.com/Kitsuna31/alpine-in-termux",
       "help": {
         "online": "http://esp32.com"
       },
       "platforms": [
         {
-          "name": "esp32",
+          "name": "esp32 ks",
           "architecture": "esp32",
           "version": "1.0.6",
           "category": "ESP32",
