@@ -14,6 +14,19 @@ is_alpine_installed() {
     [ -d "$directory" ] && [ -x "$directory/usr/bin/env" ]
 }
 
+# Helper: ensure Termux environment and core tools are up to date before install
+termux_bootstrap() {
+    echo -e "\x1b[38;5;214m[${time1}]\e[0m \x1b[38;5;83m[INFO]:\e[0m \x1b[38;5;87m Updating Termux packages and installing dependencies (this may take a while)..."
+
+    apt-get update
+    DEBIAN_FRONTEND=noninteractive \
+    apt-get upgrade -y \
+      -o Dpkg::Options::="--force-confdef" \
+      -o Dpkg::Options::="--force-confold"
+
+    apt-get install -y libandroid-posix-semaphore wget git proot tar openssh
+}
+
 # Main function to install Alpine Linux
 install1() {
     directory="alpine-fs"
@@ -36,7 +49,10 @@ install1() {
         echo -e "\x1b[38;5;214m[${time1}]\e[0m \x1b[38;5;203m[ERROR]:\e[0m \x1b[38;5;87m 'wget' is installed but cannot run correctly."
         echo -e "\x1b[38;5;214m[${time1}]\e[0m        Please upgrade your Termux environment and install missing libraries, for example:"
         echo -e "    apt-get update"
-        echo -e "    DEBIAN_FRONTEND=noninteractive \\\n    apt-get upgrade -y \\\n      -o Dpkg::Options::=\"--force-confdef\" \\\n      -o Dpkg::Options::=\"--force-confold\""
+        echo -e "    DEBIAN_FRONTEND=noninteractive \\\" 
+        echo -e "    apt-get upgrade -y \\\" 
+        echo -e "      -o Dpkg::Options::=\"--force-confdef\" \\\" 
+        echo -e "      -o Dpkg::Options::=\"--force-confold\""
         echo -e "    apt-get install -y libandroid-posix-semaphore wget git proot tar openssh"
         echo -e "\x1b[38;5;214m[${time1}]\e[0m        After fixing Termux, run this installer again."
         exit 1
@@ -48,7 +64,7 @@ install1() {
         [ -f "alpine.tar.gz" ] && rm -rf alpine.tar.gz
 
         # Download the Alpine rootfs based on the system architecture
-        echo -e "\x1b[38;5;214m[${time1}]\e[0m \x1b[38;5;83m[INFO]:\e[0m \x1b[38;5;87m Detecting architecture and downloading Alpine ${ALPINE_VERSION} rootfs..."\r\n        ARCHITECTURE=$(dpkg --print-architecture)\r\n        case "$ARCHITECTURE" in
+        echo -e "\x1b[38;5;214m[${time1}]\e[0m \x1b[38;5;83m[INFO]:\e[0m \x1b[38;5;87m Detecting architecture and downloading Alpine ${ALPINE_VERSION} rootfs..."
         ARCHITECTURE=$(dpkg --print-architecture)
         case "$ARCHITECTURE" in
             # Termux commonly reports aarch64; Alpine uses the same name in the URL
@@ -101,6 +117,9 @@ EOM
     chmod +x startalpine.sh
     echo -e "\x1b[38;5;214m[${time1}]\e[0m \x1b[38;5;83m[INFO]:\e[0m \x1b[38;5;87m Start script created! Use './startalpine.sh' to launch Alpine."
 }
+
+# Run Termux bootstrap first to ensure environment and tools are ready
+termux_bootstrap
 
 # Prompt the user before starting the installation
 if [ "${1-}" = "-y" ]; then
