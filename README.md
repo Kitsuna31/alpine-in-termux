@@ -29,7 +29,7 @@ Currently targets **Alpine Linux 3.22.2**.
      -o Dpkg::Options::="--force-confold"
    ```
 
-2. (Optional) Install basic tools (also handled by the installer):
+2. Install basic:
    ```
    apt-get install wget proot git tar openssh -y
    ```
