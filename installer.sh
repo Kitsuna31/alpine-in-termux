@@ -44,18 +44,6 @@ install1() {
     elif [ -z "$(command -v wget)" ]; then
         echo -e "\x1b[38;5;214m[${time1}]\e[0m \x1b[38;5;203m[ERROR]:\e[0m \x1b[38;5;87m Please install wget and try again."
         exit 1
-    # wget exists but may be broken due to missing Termux libraries (e.g. libandroid-posix-semaphore)
-    elif ! wget --version >/dev/null 2>&1; then
-        echo -e "\x1b[38;5;214m[${time1}]\e[0m \x1b[38;5;203m[ERROR]:\e[0m \x1b[38;5;87m 'wget' is installed but cannot run correctly."
-        echo -e "\x1b[38;5;214m[${time1}]\e[0m        Please upgrade your Termux environment and install missing libraries, for example:"
-        echo -e "    apt-get update"
-        echo -e "    DEBIAN_FRONTEND=noninteractive \\\" 
-        echo -e "    apt-get upgrade -y \\\" 
-        echo -e "      -o Dpkg::Options::=\"--force-confdef\" \\\" 
-        echo -e "      -o Dpkg::Options::=\"--force-confold\""
-        echo -e "    apt-get install -y libandroid-posix-semaphore wget git proot tar openssh"
-        echo -e "\x1b[38;5;214m[${time1}]\e[0m        After fixing Termux, run this installer again."
-        exit 1
     fi
 
     # If not installed, begin the installation process
