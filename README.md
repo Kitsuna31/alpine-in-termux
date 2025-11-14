@@ -8,7 +8,7 @@ This is a script that allows you to install Alpine Linux in your Termux applicat
 
 ## Updates
 
-**• Updated to Alpine Linux 3.18**
+**• Updated to Alpine Linux 3.22.2**
 
 ## Important
 
@@ -20,7 +20,7 @@ This is a script that allows you to install Alpine Linux in your Termux applicat
 
 - Lightweight Linux distribution for Termux
 - Easy installation process
-- Updated to the latest stable version (3.18)
+- Updated to the latest stable version (3.22.2)
 
 ---
 
