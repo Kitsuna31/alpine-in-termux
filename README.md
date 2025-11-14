@@ -2,31 +2,25 @@
 
 [![KitStudio Project](https://img.shields.io/badge/KitStudio%20Project-GitHub%20Projects-black?style=for-the-badge&logo=github&logoColor=white&labelColor=%232F2F2F)](https://github.com/Kitsuna31?tab=repositories)
 
-## What's This?
+## Overview
 
-This is a script that allows you to install Alpine Linux in your Termux application without requiring a rooted device.
+Small script to set up Alpine Linux under Termux without root.
 
-## Updates
-
-**• Updated to Alpine Linux 3.22.2**
-
-## Important
-
-**• If you encounter issues during installation or runtime, please refer to the troubleshooting steps provided below.**
+Currently targets **Alpine Linux 3.22.2**.
 
 ---
 
 ## Features
 
-- Lightweight Linux distribution for Termux
-- Easy installation process
-- Updated to the latest stable version (3.22.2)
+- Alpine userspace inside Termux (no root)
+- Simple one-shot installer script
+- Uses the current 3.22 stable branch
 
 ---
 
-### Installation Steps
+## Install
 
-1. (Optional) Manually update Termux (the installer will also do this automatically):
+1. (Optional) Update Termux (the installer will also do this):
    ```
    apt-get update
    DEBIAN_FRONTEND=noninteractive \
@@ -35,47 +29,47 @@ This is a script that allows you to install Alpine Linux in your Termux applicat
      -o Dpkg::Options::="--force-confold"
    ```
 
-2. (Optional) Manually install core tools (the installer will also install them if missing):
+2. (Optional) Install basic tools (also handled by the installer):
    ```
    apt-get install wget proot git tar openssh -y
    ```
 
-3. Download the installation script:
+3. Clone the repo:
    ```
    git clone https://github.com/Kitsuna31/alpine-in-termux.git
    ```
 
-4. Go to the script folder:
+4. Enter the directory:
    ```
    cd alpine-in-termux
    ```
 
-5. Give execution permissions to the installer:
+5. Make the installer executable:
    ```
    chmod +x installer.sh
    ```
 
-6. Run the installer (interactive):
+6. Run the installer:
    ```
    ./installer.sh
    ```
-   or non-interactively (no prompt):
+   or, to skip the prompt:
    ```
    ./installer.sh -y
    ```
 
-7. Start Alpine Linux:
+7. Start Alpine:
    ```
    ./startalpine.sh
    ```
 
 ---
 
-### Common Issues
+## Troubleshooting
 
-#### 1) `proot error: '/usr/bin/env' not found`
+### `proot error: '/usr/bin/env' not found`
 
-If you encounter the following error while starting Alpine:
+Example output:
 ```
 ./startalpine.sh
 proot warning: can't sanitize binding "alpine-fs/tmp": No such file or directory
@@ -85,11 +79,11 @@ proot error: '/usr/bin/env' not found (root = /data/data/com.termux/files/home/a
 fatal error: see proot --help.
 ```
 
-This usually means the Alpine rootfs did not extract correctly or is incomplete.
+Usually means the rootfs didn't unpack properly.
 
-How to Fix It:
+Fix:
 
-1. Clean the broken install (this removes the existing Alpine rootfs):
+1. Remove the broken install:
    ```
    rm -rf alpine-fs alpine.tar.gz startalpine.sh
    ```
@@ -108,7 +102,7 @@ How to Fix It:
    ./startalpine.sh
    ```
 
-#### 2) Termux `wget` cannot start (linker error)
+### `wget` fails with linker error
 
 On some Termux setups you may see:
 
@@ -116,7 +110,9 @@ On some Termux setups you may see:
 CANNOT LINK EXECUTABLE "wget": library "libandroid-posix-semaphore.so" not found: needed by ... libuuid.so in namespace (default)
 ```
 
-This is a Termux environment issue (not specific to this script). The installer will now detect this and print a message if `wget` cannot run correctly. To fix your Termux environment, run:
+That's a Termux environment issue, not specific to this script.
+
+To fix it:
 
 ``` 
 apt-get update
@@ -128,13 +124,12 @@ apt-get install -y libandroid-posix-semaphore
 apt-get install -y wget git proot tar openssh
 ```
 
-Then re-run the installer steps from above.
+Then re-run the installer.
 
 ---
 
-Credits
+## Credits
 
-This project was inspired by the ubuntu-in-termux project. I would like to express my sincere gratitude to the creator of ubuntu-in-termux, MFDGaming, whose work inspired the creation of the alpine-in-termux project.
+Inspired by the ubuntu-in-termux project by **MFDGaming**:
 
-ubuntu-in-termux
-https://github.com/MFDGaming/ubuntu-in-termux
+- https://github.com/MFDGaming/ubuntu-in-termux
