@@ -26,7 +26,7 @@ This is a script that allows you to install Alpine Linux in your Termux applicat
 
 ### Installation Steps
 
-1. Update Termux and upgrade packages (recommended non-interactive):
+1. (Optional) Manually update Termux (the installer will also do this automatically):
    ```
    apt-get update
    DEBIAN_FRONTEND=noninteractive \
@@ -35,7 +35,7 @@ This is a script that allows you to install Alpine Linux in your Termux applicat
      -o Dpkg::Options::="--force-confold"
    ```
 
-2. Make sure core tools are installed:
+2. (Optional) Manually install core tools (the installer will also install them if missing):
    ```
    apt-get install wget proot git tar openssh -y
    ```
