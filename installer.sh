@@ -1,119 +1,102 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
-# Script to install Alpine Linux in Termux
-# Written with comments to help GitHub users understand each step
+# quick alpine installer for termux
 
-set -euo pipefail
+set -e
 
-# Save the current time for logging purposes
 time1="$(date +"%r")"
 
-# Helper: detect whether a *valid* Alpine rootfs appears to be installed
 is_alpine_installed() {
-    local directory="alpine-fs"
-    [ -d "$directory" ] && [ -x "$directory/usr/bin/env" ]
+    [ -d alpine-fs ] && [ -x alpine-fs/usr/bin/env ]
 }
 
-# Helper: ensure Termux environment and core tools are up to date before install
 termux_bootstrap() {
-    echo -e "\x1b[38;5;214m[${time1}]\e[0m \x1b[38;5;83m[INFO]:\e[0m \x1b[38;5;87m Updating Termux packages and installing dependencies (this may take a while)..."
-
+    echo "[${time1}] updating termux packages..."
     apt-get update
-    DEBIAN_FRONTEND=noninteractive \
-    apt-get upgrade -y \
-      -o Dpkg::Options::="--force-confdef" \
-      -o Dpkg::Options::="--force-confold"
-
+    DEBIAN_FRONTEND=noninteractive apt-get upgrade -y \
+        -o Dpkg::Options::="--force-confdef" \
+        -o Dpkg::Options::="--force-confold"
     apt-get install -y libandroid-posix-semaphore wget git proot tar openssh
 }
 
-# Main function to install Alpine Linux
 install1() {
     directory="alpine-fs"
-    # Alpine 3.22 branch and current point release (see https://www.alpinelinux.org/downloads/)
-    ALPINE_BRANCH='3.22'
-    ALPINE_VERSION='3.22.2'
+    ALPINE_BRANCH=3.22
+    ALPINE_VERSION=3.22.2
 
-    # Check if a valid installation already exists
     if is_alpine_installed; then
+        echo "[${time1}] alpine already installed, skipping."
         first=1
-        echo -e "\x1b[38;5;214m[${time1}]\e[0m \x1b[38;5;227m[WARNING]:\e[0m \x1b[38;5;87m Detected existing Alpine rootfs, skipping download and extraction."
-    elif [ -z "$(command -v proot)" ]; then
-        echo -e "\x1b[38;5;214m[${time1}]\e[0m \x1b[38;5;203m[ERROR]:\e[0m \x1b[38;5;87m Please install proot and try again."
-        exit 1
-    elif [ -z "$(command -v wget)" ]; then
-        echo -e "\x1b[38;5;214m[${time1}]\e[0m \x1b[38;5;203m[ERROR]:\e[0m \x1b[38;5;87m Please install wget and try again."
-        exit 1
+    else
+        # just checking tools
+        if ! command -v proot >/dev/null; then
+            echo "proot missing."
+            exit 1
+        fi
+        if ! command -v wget >/dev/null; then
+            echo "wget missing."
+            exit 1
+        fi
     fi
 
-    # If not installed, begin the installation process
     if [ "${first-0}" != 1 ]; then
-        # Remove any previous Alpine rootfs file if it exists
-        [ -f "alpine.tar.gz" ] && rm -rf alpine.tar.gz
+        [ -f alpine.tar.gz ] && rm -f alpine.tar.gz
 
-        # Download the Alpine rootfs based on the system architecture
-        echo -e "\x1b[38;5;214m[${time1}]\e[0m \x1b[38;5;83m[INFO]:\e[0m \x1b[38;5;87m Detecting architecture and downloading Alpine ${ALPINE_VERSION} rootfs..."
+        echo "[${time1}] grabbing alpine rootfs..."
         ARCHITECTURE=$(dpkg --print-architecture)
         case "$ARCHITECTURE" in
-            # Termux commonly reports aarch64; Alpine uses the same name in the URL
-            aarch64) ARCHITECTURE=aarch64;;
-            arm) ARCHITECTURE=armhf;;
-            amd64|x86_64) ARCHITECTURE=x86_64;;
+            aarch64) ARCHITECTURE=aarch64 ;;
+            arm)     ARCHITECTURE=armhf ;;
+            amd64|x86_64) ARCHITECTURE=x86_64 ;;
             *)
-                echo -e "\x1b[38;5;214m[${time1}]\e[0m \x1b[38;5;203m[ERROR]:\e[0m \x1b[38;5;87m Unsupported architecture: $ARCHITECTURE"
+                echo "unsupported arch: $ARCHITECTURE"
                 exit 1
                 ;;
         esac
 
-        if ! wget "https://dl-cdn.alpinelinux.org/alpine/v${ALPINE_BRANCH}/releases/${ARCHITECTURE}/alpine-minirootfs-${ALPINE_VERSION}-${ARCHITECTURE}.tar.gz" -q -O alpine.tar.gz; then
-            echo -e "\x1b[38;5;214m[${time1}]\e[0m \x1b[38;5;203m[ERROR]:\e[0m \x1b[38;5;87m Failed to download Alpine rootfs. Please check your Termux network setup and try again."
-            exit 1
-        fi
+        wget "https://dl-cdn.alpinelinux.org/alpine/v${ALPINE_BRANCH}/releases/${ARCHITECTURE}/alpine-minirootfs-${ALPINE_VERSION}-${ARCHITECTURE}.tar.gz" \
+            -q -O alpine.tar.gz || {
+                echo "failed to download rootfs."
+                exit 1
+            }
 
         if [ ! -s alpine.tar.gz ]; then
-            echo -e "\x1b[38;5;214m[${time1}]\e[0m \x1b[38;5;203m[ERROR]:\e[0m \x1b[38;5;87m Downloaded alpine.tar.gz is empty or missing. Aborting."
+            echo "rootfs file empty?"
             exit 1
         fi
 
-        echo -e "\x1b[38;5;214m[${time1}]\e[0m \x1b[38;5;83m[INFO]:\e[0m \x1b[38;5;87m Download complete!"
-
-        # Extract the rootfs file
         mkdir -p "$directory"
-        echo -e "\x1b[38;5;214m[${time1}]\e[0m \x1b[38;5;83m[INFO]:\e[0m \x1b[38;5;87m Decompressing rootfs (this may take a while)..."
+        echo "[${time1}] extracting..."
         if ! tar -xvzf alpine.tar.gz -C "$directory"; then
-            echo -e "\x1b[38;5;214m[${time1}]\e[0m \x1b[38;5;203m[ERROR]:\e[0m \x1b[38;5;87m Extraction failed. Please verify the integrity of the rootfs file or re-run the installer."
+            echo "extract failed."
             exit 1
         fi
-        echo -e "\x1b[38;5;214m[${time1}]\e[0m \x1b[38;5;83m[INFO]:\e[0m \x1b[38;5;87m Decompression complete!"
 
-        # Configure DNS for internet access in Alpine
+        # basic dns
         echo "nameserver 8.8.8.8" > "$directory/etc/resolv.conf"
         echo "nameserver 8.8.4.4" >> "$directory/etc/resolv.conf"
     fi
 
-    # Create a start script for Alpine
-    echo -e "\x1b[38;5;214m[${time1}]\e[0m \x1b[38;5;83m[INFO]:\e[0m \x1b[38;5;87m Creating start script..."
-    cat > startalpine.sh <<- EOM
+    echo "[${time1}] writing start script..."
+    cat > startalpine.sh <<EOF
 #!/bin/bash
 unset LD_PRELOAD
-command="proot"
-command+=" --link2symlink -0 -r $directory"
-command+=" -b /dev -b /proc -b /sys -b /sdcard -w /root"
-command+=" /usr/bin/env -i HOME=/root PATH=/bin:/usr/bin TERM=\$TERM /bin/sh --login"
-\$command
-EOM
+cmd="proot --link2symlink -0 -r $directory"
+cmd="\$cmd -b /dev -b /proc -b /sys -b /sdcard -w /root"
+cmd="\$cmd /usr/bin/env -i HOME=/root PATH=/bin:/usr/bin TERM=\$TERM /bin/sh --login"
+\$cmd
+EOF
+
     chmod +x startalpine.sh
-    echo -e "\x1b[38;5;214m[${time1}]\e[0m \x1b[38;5;83m[INFO]:\e[0m \x1b[38;5;87m Start script created! Use './startalpine.sh' to launch Alpine."
+    echo "done. run ./startalpine.sh"
 }
 
-# Run Termux bootstrap first to ensure environment and tools are ready
 termux_bootstrap
 
-# Prompt the user before starting the installation
 if [ "${1-}" = "-y" ]; then
     install1
 else
-    echo -ne "\x1b[38;5;214m[${time1}]\e[0m \x1b[38;5;127m[QUESTION]:\e[0m Do you want to install Alpine Linux? [Y/n] "
+    echo -n "Install Alpine? [Y/n] "
     read cmd
-    [[ "$cmd" =~ ^[Yy]$ ]] && install1 || echo "Installation aborted."
+    [[ "$cmd" =~ ^[Yy]$ ]] && install1 || echo "cancelled."
 fi
