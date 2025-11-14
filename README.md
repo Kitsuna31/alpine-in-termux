@@ -26,14 +26,18 @@ This is a script that allows you to install Alpine Linux in your Termux applicat
 
 ### Installation Steps
 
-1. Update Termux:
+1. Update Termux and upgrade packages (recommended non-interactive):
    ```
-   apt-get update && apt-get upgrade -y
+   apt-get update
+   DEBIAN_FRONTEND=noninteractive \
+   apt-get upgrade -y \
+     -o Dpkg::Options::="--force-confdef" \
+     -o Dpkg::Options::="--force-confold"
    ```
-   
-2. Install required packages:
+
+2. Make sure core tools are installed:
    ```
-   apt-get install wget proot git tar -y
+   apt-get install wget proot git tar openssh -y
    ```
 
 3. Download the installation script:
@@ -51,22 +55,25 @@ This is a script that allows you to install Alpine Linux in your Termux applicat
    chmod +x installer.sh
    ```
 
-6. Run the installer:
+6. Run the installer (interactive):
    ```
    ./installer.sh
    ```
-   note: if an error occurs during installation run ./installer.sh again and it will be fixed
+   or non-interactively (no prompt):
+   ```
+   ./installer.sh -y
+   ```
 
 7. Start Alpine Linux:
    ```
    ./startalpine.sh
    ```
 
-
-
 ---
 
-Common Issue: proot Errors
+### Common Issues
+
+#### 1) `proot error: '/usr/bin/env' not found`
 
 If you encounter the following error while starting Alpine:
 ```
@@ -78,32 +85,50 @@ proot error: '/usr/bin/env' not found (root = /data/data/com.termux/files/home/a
 fatal error: see proot --help.
 ```
 
+This usually means the Alpine rootfs did not extract correctly or is incomplete.
+
 How to Fix It:
 
-1. Check if alpine.tar.gz exists:
+1. Clean the broken install (this removes the existing Alpine rootfs):
    ```
-   ls -lh alpine.tar.gz
-   ```
-    
-      Note: If the file is missing, please download it again.
-   ```
-   wget https://dl-cdn.alpinelinux.org/alpine/v3.18/releases/aarch64/alpine-minirootfs-3.18.0-aarch64.tar.gz -O alpine.tar.gz
+   rm -rf alpine-fs alpine.tar.gz startalpine.sh
    ```
 
+2. Re-run the installer:
+   ```
+   ./installer.sh
+   ```
+   or:
+   ```
+   ./installer.sh -y
+   ```
 
-2. Manually extract alpine.tar.gz to the alpine-fs directory:
+3. Start Alpine again:
+   ```
+   ./startalpine.sh
+   ```
+
+#### 2) Termux `wget` cannot start (linker error)
+
+On some Termux setups you may see:
+
 ```
-tar -xvzf alpine.tar.gz -C alpine-fs
+CANNOT LINK EXECUTABLE "wget": library "libandroid-posix-semaphore.so" not found: needed by ... libuuid.so in namespace (default)
 ```
 
-3. Reinstall Alpine:
+This is a Termux environment issue (not specific to this script). Make sure your Termux is fully upgraded and install the missing library:
+
+``` 
+apt-get update
+DEBIAN_FRONTEND=noninteractive \
+apt-get upgrade -y \
+  -o Dpkg::Options::="--force-confdef" \
+  -o Dpkg::Options::="--force-confold"
+apt-get install -y libandroid-posix-semaphore
+apt-get install -y wget git proot tar openssh
 ```
-./installer.sh -y
-```
-4. Start
-```
-./startalpine.sh
-```
+
+Then re-run the installer steps from above.
 
 ---
 
