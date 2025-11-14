@@ -17,7 +17,9 @@ is_alpine_installed() {
 # Main function to install Alpine Linux
 install1() {
     directory="alpine-fs"
-    ALPINE_VERSION='3.18'
+    # Alpine 3.22 branch and current point release (see https://www.alpinelinux.org/downloads/)
+    ALPINE_BRANCH='3.22'
+    ALPINE_VERSION='3.22.2'
 
     # Check if a valid installation already exists
     if is_alpine_installed; then
@@ -46,7 +48,7 @@ install1() {
         [ -f "alpine.tar.gz" ] && rm -rf alpine.tar.gz
 
         # Download the Alpine rootfs based on the system architecture
-        echo -e "\x1b[38;5;214m[${time1}]\e[0m \x1b[38;5;83m[INFO]:\e[0m \x1b[38;5;87m Detecting architecture and downloading Alpine rootfs..."
+        echo -e "\x1b[38;5;214m[${time1}]\e[0m \x1b[38;5;83m[INFO]:\e[0m \x1b[38;5;87m Detecting architecture and downloading Alpine ${ALPINE_VERSION} rootfs..."\r\n        ARCHITECTURE=$(dpkg --print-architecture)\r\n        case "$ARCHITECTURE" in
         ARCHITECTURE=$(dpkg --print-architecture)
         case "$ARCHITECTURE" in
             # Termux commonly reports aarch64; Alpine uses the same name in the URL
@@ -59,7 +61,7 @@ install1() {
                 ;;
         esac
 
-        if ! wget "https://dl-cdn.alpinelinux.org/alpine/v${ALPINE_VERSION}/releases/${ARCHITECTURE}/alpine-minirootfs-${ALPINE_VERSION}-${ARCHITECTURE}.tar.gz" -q -O alpine.tar.gz; then
+        if ! wget "https://dl-cdn.alpinelinux.org/alpine/v${ALPINE_BRANCH}/releases/${ARCHITECTURE}/alpine-minirootfs-${ALPINE_VERSION}-${ARCHITECTURE}.tar.gz" -q -O alpine.tar.gz; then
             echo -e "\x1b[38;5;214m[${time1}]\e[0m \x1b[38;5;203m[ERROR]:\e[0m \x1b[38;5;87m Failed to download Alpine rootfs. Please check your Termux network setup and try again."
             exit 1
         fi
