@@ -116,7 +116,7 @@ On some Termux setups you may see:
 CANNOT LINK EXECUTABLE "wget": library "libandroid-posix-semaphore.so" not found: needed by ... libuuid.so in namespace (default)
 ```
 
-This is a Termux environment issue (not specific to this script). Make sure your Termux is fully upgraded and install the missing library:
+This is a Termux environment issue (not specific to this script). The installer will now detect this and print a message if `wget` cannot run correctly. To fix your Termux environment, run:
 
 ``` 
 apt-get update
