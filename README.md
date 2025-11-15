@@ -20,13 +20,9 @@ Currently targets **Alpine Linux 3.22.2**.
 
 ## Install
 
-1. Update Termux (the installer will also do this):
+1. Update Termux:
    ```
    apt-get update
-   DEBIAN_FRONTEND=noninteractive \
-   apt-get upgrade -y \
-     -o Dpkg::Options::="--force-confdef" \
-     -o Dpkg::Options::="--force-confold"
    ```
 
 2. Install package:
