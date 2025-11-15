@@ -20,7 +20,7 @@ Currently targets **Alpine Linux 3.22.2**.
 
 ## Install
 
-1. (Optional) Update Termux (the installer will also do this):
+1. Update Termux (the installer will also do this):
    ```
    apt-get update
    DEBIAN_FRONTEND=noninteractive \
@@ -29,7 +29,7 @@ Currently targets **Alpine Linux 3.22.2**.
      -o Dpkg::Options::="--force-confold"
    ```
 
-2. Install basic:
+2. Install package:
    ```
    apt-get install wget proot git tar openssh -y
    ```
