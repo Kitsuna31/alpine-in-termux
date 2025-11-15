@@ -49,11 +49,7 @@ Currently targets **Alpine Linux 3.22.2**.
    ```
    ./installer.sh
    ```
-   or, to skip the prompt:
-   ```
-   ./installer.sh -y
-   ```
-
+   
 7. Start Alpine:
    ```
    ./startalpine.sh
